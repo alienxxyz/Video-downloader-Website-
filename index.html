@@ -1,132 +1,230 @@
-<!DOCTYPE html>
-<html lang="hi">
+<!<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AlienX - Media Downloader</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background-color: #0b1120; color: #ffffff; padding: 20px; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e293b; margin-bottom: 20px; }
-    header h1 { color: #38bdf8; }
-    nav a { color: #cbd5e1; text-decoration: none; margin-left: 15px; }
-    
-    .card { background-color: #1e293b; padding: 25px; border-radius: 12px; margin-bottom: 25px; }
-    .input-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-    input[type="text"] { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid #334155; background-color: #0f172a; color: white; min-width: 200px; }
-    button { padding: 12px 24px; background-color: #38bdf8; color: #0b1120; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    button:disabled { background-color: #64748b; cursor: not-allowed; }
-    
-    #resultContainer { display: none; margin-top: 15px; background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; }
-    #downloadLink { display: inline-block; padding: 10px 20px; background: #22c55e; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px; }
-    footer { text-align: center; color: #64748b; margin-top: 40px; padding: 20px 0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlienX - Media Downloader</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #21262d;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        nav a {
+            color: #8b949e;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 14px;
+        }
+        nav a:hover {
+            color: #ffffff;
+        }
+        main {
+            flex: 1;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: #38bdf8;
+        }
+        button {
+            background-color: #38bdf8;
+            color: #0d1117;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0284c7;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        #statusMsg {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        #resultContainer {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #238636;
+        }
+        .download-btn-link {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 16px;
+            background-color: #238636;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        footer {
+            text-align: center;
+            padding-top: 20px;
+            color: #8b949e;
+            font-size: 12px;
+            border-top: 1px solid #21262d;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>ALIENX</h1>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#downloader">Downloader</a>
-      <a href="#articles">Articles</a>
-    </nav>
-  </header>
+    <header>
+        <div class="logo">AlienX</div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Downloader</a>
+            <a href="#">Articles</a>
+        </nav>
+    </header>
 
-  <main>
-    <section class="card" id="home">
-      <h2>Welcome to AlienX</h2>
-      <p style="margin-top: 10px; color: #94a3b8;">Welcome! Here you'll find the best content and media tools.</p>
-    </section>
+    <main>
+        <section class="card">
+            <h2>Welcome to AlienX</h2>
+            <p style="margin-top: 10px; color: #8b949e;">Welcome! Here you'll find the best content and media tools.</p>
+        </section>
 
-    <!-- Downloader Section -->
-    <section class="card" id="downloader">
-      <h2>Video Downloader Tool</h2>
-      <p style="margin-top: 10px; color: #94a3b8;">Paste the link of the video below and download it:</p>
-      
-      <div class="input-group">
-        <input type="text" id="videoUrl" placeholder="https://www.instagram.com/reel/..." />
-        <button id="downloadBtn" onclick="downloadVideo()">Download</button>
-      </div>
+        <section class="card">
+            <h2>Video Downloader Tool</h2>
+            <p style="margin-top: 10px; color: #8b949e;">Paste the link of the video below and download it:</p>
+            
+            <div class="input-group">
+                <input type="text" id="videoUrl" placeholder="https://www.instagram.com/reel/..." />
+                <button id="downloadBtn" onclick="downloadVideo()">Download</button>
+            </div>
 
-      <p id="statusMsg" style="margin-top: 15px; font-weight: bold;"></p>
+            <p id="statusMsg"></p>
 
-      <div id="resultContainer">
-        <p style="color: #4ade80;">Video successfully fetched!</p>
-        <a id="downloadLink" href="#" target="_blank" download>Download Media File</a>
-      </div>
-    </section>
+            <div id="resultContainer">
+                <p style="color: #22c55e;">Video successfully fetched!</p>
+                <a id="downloadLink" href="#" target="_blank" download class="download-btn-link">Download Media File</a>
+            </div>
+        </section>
 
-    <!-- Articles Section -->
-    <section class="card" id="articles">
-      <h2>Latest Articles</h2>
-      <div style="margin-top: 15px;">
-        <h3>Video Editing Tips</h3>
-        <p style="color: #94a3b8; margin-top: 5px;">Use these best editing tricks to make your reels viral.</p>
-      </div>
-    </section>
-  </main>
+        <section class="card" id="articles">
+            <h2>Latest Articles</h2>
+            <h3 style="margin-top: 15px;">Video Editing Tips</h3>
+            <p style="color: #8b949e; margin-top: 5px;">Use these best editing tricks to make your reels viral.</p>
+        </section>
+    </main>
 
-  <footer>
-    <p>&copy; 2026 AlienX. All rights reserved.</p>
-  </footer>
+    <footer>
+        <p>&copy; 2026 AlienX. All rights reserved.</p>
+    </footer>
 
-  <script>
+    <script>
     async function downloadVideo() {
-      const urlInput = document.getElementById('videoUrl').value.trim();
-      const statusMsg = document.getElementById('statusMsg');
-      const resultContainer = document.getElementById('resultContainer');
-      const downloadLink = document.getElementById('downloadLink');
-      const downloadBtn = document.getElementById('downloadBtn');
+        const urlInput = document.getElementById('videoUrl');
+        const statusMsg = document.getElementById('statusMsg');
+        const resultContainer = document.getElementById('resultContainer');
+        const downloadLink = document.getElementById('downloadLink');
+        const downloadBtn = document.getElementById('downloadBtn');
 
-      if (!urlInput) {
-        statusMsg.innerText = 'Please paste a valid video URL!';
-        statusMsg.style.color = '#ef4444';
-        return;
-      }
-
-      statusMsg.innerText = 'Processing... Please wait a few seconds.';
-      statusMsg.style.color = '#38bdf8';
-      downloadBtn.disabled = true;
-      resultContainer.style.display = 'none';
-
-      try {
-        const response = await fetch(`https://api.cobalt.tools/api/json`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ url: urlInput })
-        });
-
-        const data = await response.json();
-
-        if (data && data.url) {
-          statusMsg.innerText = 'Success! Click the green button below to save:';
-          statusMsg.style.color = '#22c55e';
-
-          downloadLink.href = data.url;
-          resultContainer.style.display = 'block';
-        } else if (data && data.status === 'picker' && data.picker && data.picker.length > 0) {
-          statusMsg.innerText = 'Success! Click the green button below to save:';
-          statusMsg.style.color = '#22c55e';
-
-          downloadLink.href = data.picker[0].url;
-          resultContainer.style.display = 'block';
-        } else {
-          statusMsg.innerText = 'Unable to download video. Please check if the link is public.';
-          statusMsg.style.color = '#ef4444';
+        if (!urlInput || !urlInput.value.trim()) {
+            statusMsg.innerText = 'Please paste a valid video URL!';
+            statusMsg.style.color = '#ef4444';
+            return;
         }
-      } catch (error) {
-        console.error('Error:', error);
-        statusMsg.innerText = 'Something went wrong. Please check your internet connection or try another URL.';
-        statusMsg.style.color = '#ef4444';
-      } finally {
-        downloadBtn.disabled = false;
-      }
-    }
-  </script>
 
+        const videoUrl = urlInput.value.trim();
+        statusMsg.innerText = 'Processing... Please wait a few seconds.';
+        statusMsg.style.color = '#38bdf8';
+        downloadBtn.disabled = true;
+        resultContainer.style.display = 'none';
+
+        try {
+            const response = await fetch(`https://instagram-reels-downloader-api.p.rapidapi.com/download?url=${encodeURIComponent(videoUrl)}`, {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-host': 'instagram-reels-downloader-api.p.rapidapi.com',
+                    'x-rapidapi-key': '0c0bcbe0eemsh828fa907bfb4603p1ed747jsne32d33abc7c6'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data && (data.download_url || data.data || data.url)) {
+                const mediaUrl = data.download_url || data.data || data.url;
+                statusMsg.innerText = 'Success! Click the green button below to save:';
+                statusMsg.style.color = '#22c55e';
+                
+                downloadLink.href = mediaUrl;
+                resultContainer.style.display = 'block';
+            } else {
+                statusMsg.innerText = 'Unable to download video. Please check if the link is public.';
+                statusMsg.style.color = '#ef4444';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            statusMsg.innerText = 'Something went wrong. Please check your internet connection or try another URL.';
+            statusMsg.style.color = '#ef4444';
+        } finally {
+            downloadBtn.disabled = false;
+        }
+    }
+    </script>
 </body>
 </html>
