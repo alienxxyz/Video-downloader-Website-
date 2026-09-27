@@ -173,58 +173,65 @@
 
     <footer>
         <p>&copy; 2026 AlienX. All rights reserved.</p>
-    </footer>
-
     <script>
-    async function downloadVideo() {
-        const urlInput = document.getElementById('videoUrl');
-        const statusMsg = document.getElementById('statusMsg');
-        const resultContainer = document.getElementById('resultContainer');
-        const downloadLink = document.getElementById('downloadLink');
-        const downloadBtn = document.getElementById('downloadBtn');
+async function downloadVideo() {
+    const urlInput = document.getElementById('videoUrl');
+    const statusMsg = document.getElementById('statusMsg');
+    const resultContainer = document.getElementById('resultContainer');
+    const downloadLink = document.getElementById('downloadLink');
+    const downloadBtn = document.getElementById('downloadBtn');
 
-        if (!urlInput || !urlInput.value.trim()) {
-            statusMsg.innerText = 'Please paste a valid video URL!';
-            statusMsg.style.color = '#ef4444';
-            return;
-        }
-
-        const videoUrl = urlInput.value.trim();
-        statusMsg.innerText = 'Processing... Please wait a few seconds.';
-        statusMsg.style.color = '#38bdf8';
-        downloadBtn.disabled = true;
-        resultContainer.style.display = 'none';
-
-        try {
-            const response = await fetch(`https://instagram-reels-downloader-api.p.rapidapi.com/download?url=${encodeURIComponent(videoUrl)}`, {
-                method: 'GET',
-                headers: {
-                    'x-rapidapi-host': 'instagram-reels-downloader-api.p.rapidapi.com',
-                    'x-rapidapi-key': '0c0bcbe0eemsh828fa907bfb4603p1ed747jsne32d33abc7c6'
-                }
-            });
-
-            const data = await response.json();
-
-            if (data && (data.download_url || data.data || data.url)) {
-                const mediaUrl = data.download_url || data.data || data.url;
-                statusMsg.innerText = 'Success! Click the green button below to save:';
-                statusMsg.style.color = '#22c55e';
-                
-                downloadLink.href = mediaUrl;
-                resultContainer.style.display = 'block';
-            } else {
-                statusMsg.innerText = 'Unable to download video. Please check if the link is public.';
-                statusMsg.style.color = '#ef4444';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            statusMsg.innerText = 'Something went wrong. Please check your internet connection or try another URL.';
-            statusMsg.style.color = '#ef4444';
-        } finally {
-            downloadBtn.disabled = false;
-        }
+    if (!urlInput || !urlInput.value.trim()) {
+        statusMsg.innerText = 'Please paste a valid video URL!';
+        statusMsg.style.color = '#ef4444';
+        return;
     }
+
+    const videoUrl = urlInput.value.trim();
+    statusMsg.innerText = 'Processing... Please wait a few seconds.';
+    statusMsg.style.color = '#38bdf8';
+    downloadBtn.disabled = true;
+    resultContainer.style.display = 'none';
+
+    try {
+        const response = await fetch('https://api.cobalt.tools/api/json', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: videoUrl })
+        });
+
+        const data = await response.json();
+
+        if (data && data.url) {
+            statusMsg.innerText = 'Success! Click the green button below to save:';
+            statusMsg.style.color = '#22c55e';
+            
+            downloadLink.href = data.url;
+            resultContainer.style.display = 'block';
+        } else if (data && data.picker && data.picker.length > 0) {
+            statusMsg.innerText = 'Success! Click the green button below to save:';
+            statusMsg.style.color = '#22c55e';
+            
+            downloadLink.href = data.picker[0].url;
+            resultContainer.style.display = 'block';
+        } else {
+            statusMsg.innerText = 'Unable to download video. Please check if the link is public.';
+            statusMsg.style.color = '#ef4444';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        statusMsg.innerText = 'Something went wrong. Please check your internet connection or try another URL.';
+        statusMsg.style.color = '#ef4444';
+    } finally {
+        downloadBtn.disabled = false;
+    }
+}
     </script>
+        
+    }
+    
 </body>
 </html>
