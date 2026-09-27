@@ -189,21 +189,64 @@
     <footer>
         <p>&copy; 2026 AlienX. All rights reserved.</p>
     </footer>
+<script>
+async function downloadVideo() {
+  const urlInput = document.getElementById('videoUrl').value.trim();
+  const statusMsg = document.getElementById('statusMsg');
+  const resultContainer = document.getElementById('resultContainer');
+  const downloadLink = document.getElementById('downloadLink');
+  const downloadBtn = document.getElementById('downloadBtn');
 
-    <script>
-        function downloadMedia() {
-            const url = document.getElementById('videoUrl').value;
-            const statusMsg = document.getElementById('statusMsg');
-            
-            if (url === '') {
-                statusMsg.style.color = '#ef4444';
-                statusMsg.innerText = 'कृपया पहले वीडियो लिंक डालें!';
-            } else {
-                statusMsg.style.color = '#38bdf8';
-                statusMsg.innerText = 'प्रोसेस हो रहा है... (API इंटीग्रेशन के बाद डाउनलोड शुरू होगा)';
-            }
-        }
-    </script>
+  if (!urlInput) {
+    statusMsg.innerText = 'Please paste a valid video URL!';
+    statusMsg.style.color = '#ff4d4d';
+    return;
+  }
+
+  statusMsg.innerText = 'Processing... Please wait a few seconds.';
+  statusMsg.style.color = '#00e676';
+  downloadBtn.disabled = true;
+  resultContainer.style.display = 'none';
+
+  // RapidAPI Details
+  const apiKey = '0c0bcbe0eemsh828fa907bfb4603p1ed747jsne32d33abc7c6';
+  const apiHost = 'social-download-all-in-one.p.rapidapi.com';
+
+  try {
+    const response = await fetch(`https://${apiHost}/v1/social/autolink`, {
+      method: 'POST',
+      headers: {
+        'x-rapidapi-key': apiKey,
+        'x-rapidapi-host': apiHost,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ url: urlInput })
+    });
+
+    const data = await response.json();
+
+    // Direct link handle
+    const mediaUrl = data.download_url || data.url || data.link || (data.data && data.data.url);
+
+    if (response.ok && mediaUrl) {
+      statusMsg.innerText = 'Success! Video link generated:';
+      statusMsg.style.color = '#00e676';
+
+      downloadLink.href = mediaUrl;
+      resultContainer.style.display = 'block';
+    } else {
+      statusMsg.innerText = 'Failed to fetch video. Please check the URL or try another link.';
+      statusMsg.style.color = '#ff4d4d';
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    statusMsg.innerText = 'Something went wrong. Please try again.';
+    statusMsg.style.color = '#ff4d4d';
+  } finally {
+    downloadBtn.disabled = false;
+  }
+}
+</script>
+
 </body>
-      </html>
-  
+</html>
