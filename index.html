@@ -1,4 +1,5 @@
-<!<!DOCTYPE html>
+<!
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -40,9 +41,6 @@
             margin-left: 15px;
             font-size: 14px;
         }
-        nav a:hover {
-            color: #ffffff;
-        }
         main {
             flex: 1;
             max-width: 600px;
@@ -61,10 +59,14 @@
             margin-bottom: 8px;
             font-size: 20px;
         }
+        p {
+            color: #8b949e;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
         .input-group {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
         }
         input[type="text"] {
             flex: 1;
@@ -83,55 +85,23 @@
             background-color: #38bdf8;
             color: #0d1117;
             border: none;
+            padding: 0 20px;
             border-radius: 6px;
-            padding: 12px 20px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s;
+            font-size: 14px;
         }
         button:hover {
-            background-color: #0284c7;
+            opacity: 0.9;
         }
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        #statusMsg {
-            margin-top: 15px;
-            font-weight: bold;
+        #statusMessage {
+            margin-top: 12px;
             font-size: 14px;
-        }
-        #resultContainer {
-            display: none;
-            margin-top: 15px;
-            padding: 12px;
-            background-color: #0d1117;
-            border-radius: 6px;
-            border: 1px solid #238636;
-        }
-        .download-btn-link {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 8px 16px;
-            background-color: #238636;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        footer {
-            text-align: center;
-            padding-top: 20px;
-            color: #8b949e;
-            font-size: 12px;
-            border-top: 1px solid #21262d;
-            margin-top: 20px;
+            color: #f87171;
         }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">AlienX</div>
         <nav>
@@ -142,96 +112,59 @@
     </header>
 
     <main>
-        <section class="card">
-            <h2>Welcome to AlienX</h2>
-            <p style="margin-top: 10px; color: #8b949e;">Welcome! Here you'll find the best content and media tools.</p>
-        </section>
-
-        <section class="card">
+        <div class="card">
             <h2>Video Downloader Tool</h2>
-            <p style="margin-top: 10px; color: #8b949e;">Paste the link of the video below and download it:</p>
-            
+            <p>Paste the link of the video below and download it:</p>
             <div class="input-group">
-                <input type="text" id="videoUrl" placeholder="https://www.instagram.com/reel/..." />
-                <button id="downloadBtn" onclick="downloadVideo()">Download</button>
+                <input type="text" id="urlInput" placeholder="https://www.instagram.com/reel/...">
+                <button onclick="downloadVideo()">Download</button>
             </div>
-
-            <p id="statusMsg"></p>
-
-            <div id="resultContainer">
-                <p style="color: #22c55e;">Video successfully fetched!</p>
-                <a id="downloadLink" href="#" target="_blank" download class="download-btn-link">Download Media File</a>
-            </div>
-        </section>
-
-        <section class="card" id="articles">
-            <h2>Latest Articles</h2>
-            <h3 style="margin-top: 15px;">Video Editing Tips</h3>
-            <p style="color: #8b949e; margin-top: 5px;">Use these best editing tricks to make your reels viral.</p>
-        </section>
+            <div id="statusMessage"></div>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 AlienX. All rights reserved.</p>
     <script>
-async function downloadVideo() {
-    const urlInput = document.getElementById('videoUrl');
-    const statusMsg = document.getElementById('statusMsg');
-    const resultContainer = document.getElementById('resultContainer');
-    const downloadLink = document.getElementById('downloadLink');
-    const downloadBtn = document.getElementById('downloadBtn');
+        async function downloadVideo() {
+            const urlInput = document.getElementById('urlInput').value.trim();
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = '';
 
-    if (!urlInput || !urlInput.value.trim()) {
-        statusMsg.innerText = 'Please paste a valid video URL!';
-        statusMsg.style.color = '#ef4444';
-        return;
-    }
+            if (!urlInput) {
+                statusMessage.textContent = 'Please enter a valid URL.';
+                return;
+            }
 
-    const videoUrl = urlInput.value.trim();
-    statusMsg.innerText = 'Processing... Please wait a few seconds.';
-    statusMsg.style.color = '#38bdf8';
-    downloadBtn.disabled = true;
-    resultContainer.style.display = 'none';
+            statusMessage.style.color = '#38bdf8';
+            statusMessage.textContent = 'Processing... Please wait.';
 
-    try {
-        const response = await fetch('https://api.cobalt.tools/api/json', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: videoUrl })
-        });
+            try {
+                const response = await fetch('https://co.wuk.sh/api/json', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        url: urlInput,
+                        vQuality: '720'
+                    })
+                });
 
-        const data = await response.json();
+                const data = await response.json();
 
-        if (data && data.url) {
-            statusMsg.innerText = 'Success! Click the green button below to save:';
-            statusMsg.style.color = '#22c55e';
-            
-            downloadLink.href = data.url;
-            resultContainer.style.display = 'block';
-        } else if (data && data.picker && data.picker.length > 0) {
-            statusMsg.innerText = 'Success! Click the green button below to save:';
-            statusMsg.style.color = '#22c55e';
-            
-            downloadLink.href = data.picker[0].url;
-            resultContainer.style.display = 'block';
-        } else {
-            statusMsg.innerText = 'Unable to download video. Please check if the link is public.';
-            statusMsg.style.color = '#ef4444';
+                if (data.status === 'redirect' || data.status === 'stream' || data.url) {
+                    statusMessage.style.color = '#4ade80';
+                    statusMessage.textContent = 'Download starting...';
+                    window.location.href = data.url;
+                } else {
+                    statusMessage.style.color = '#f87171';
+                    statusMessage.textContent = 'Something went wrong. Please try another URL.';
+                }
+            } catch (error) {
+                statusMessage.style.color = '#f87171';
+                statusMessage.textContent = 'Failed to connect. Check your network.';
+            }
         }
-    } catch (error) {
-        console.error('Error:', error);
-        statusMsg.innerText = 'Something went wrong. Please check your internet connection or try another URL.';
-        statusMsg.style.color = '#ef4444';
-    } finally {
-        downloadBtn.disabled = false;
-    }
-}
     </script>
-        
-    }
-    
 </body>
 </html>
