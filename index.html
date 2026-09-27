@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlienX - Official Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #1e293b;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #38bdf8;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav a {
+            color: #f8fafc;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #38bdf8;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        .downloader-card {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border: 1px solid #334155;
+        }
+
+        .downloader-card h2 {
+            margin-bottom: 1rem;
+            color: #f8fafc;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-group input {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            background: #0f172a;
+            color: #fff;
+            outline: none;
+        }
+
+        .input-group button {
+            padding: 12px 24px;
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .input-group button:hover {
+            background: #0284c7;
+            color: #fff;
+        }
+
+        .articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .card h3 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #1e293b;
+            margin-top: 3rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AlienX</div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#downloader">Downloader</a>
+            <a href="#articles">Articles</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Welcome to AlienX</h1>
+            <p>आपका स्वागत है! यहाँ आपको बेहतरीन कंटेंट और मीडिया टूल्स मिलेंगे।</p>
+        </section>
+
+        <!-- Media Downloader Tool Section -->
+        <section id="downloader" class="downloader-card">
+            <h2>Video Downloader Tool</h2>
+            <p style="margin-bottom: 15px; color: #94a3b8;">वीडियो का लिंक नीचे पेस्ट करें और डाउनलोड करें:</p>
+            <div class="input-group">
+                <input type="text" id="videoUrl" placeholder="https://instagram.com/reel/..." />
+                <button onclick="downloadMedia()">Download</button>
+            </div>
+            <p id="statusMsg" style="margin-top: 15px; color: #38bdf8;"></p>
+        </section>
+
+        <!-- Articles Section -->
+        <h2 style="margin-bottom: 1rem;" id="articles">Latest Articles</h2>
+        <section class="articles">
+            <div class="card">
+                <h3>Video Editing Tips</h3>
+                <p>अपनी रील्स और वीडियो कंटेंट को वायरल बनाने के लिए इन बेस्ट एडिटिंग ट्रिक्स का इस्तेमाल करें।</p>
+            </div>
+            <div class="card">
+                <h3>AI Tools Guide</h3>
+                <p>AI टूल्स की मदद से अपने कंटेंट क्रिएशन की स्पीड को 10x कैसे बढ़ाएं।</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AlienX. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function downloadMedia() {
+            const url = document.getElementById('videoUrl').value;
+            const statusMsg = document.getElementById('statusMsg');
+            
+            if (url === '') {
+                statusMsg.style.color = '#ef4444';
+                statusMsg.innerText = 'कृपया पहले वीडियो लिंक डालें!';
+            } else {
+                statusMsg.style.color = '#38bdf8';
+                statusMsg.innerText = 'प्रोसेस हो रहा है... (API इंटीग्रेशन के बाद डाउनलोड शुरू होगा)';
+            }
+        }
+    </script>
+</body>
+      </html>
+  
